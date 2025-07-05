@@ -1,6 +1,6 @@
 package main
 
-import "github.com/Kofandr/APi_Proxy/internal/logger"
+import "github.com/Kofandr/API_Proxy.git/internal/logger"
 
 func main() {
 
