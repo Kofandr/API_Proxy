@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"io"
-	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -21,8 +20,7 @@ func (m *mockClient) Do(req *http.Request) (*http.Response, error) {
 }
 
 func setupHandler() *Handler {
-	logger := slog.New(slog.NewJSONHandler(io.Discard, &slog.HandlerOptions{Level: slog.LevelDebug}))
-	return New(logger)
+	return New()
 }
 
 func TestHandler_Proxy(t *testing.T) {

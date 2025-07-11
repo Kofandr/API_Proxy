@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/Kofandr/API_Proxy.git/internal/handlers"
+	"github.com/Kofandr/API_Proxy.git/internal/middleware"
 	"time"
 
 	"log/slog"
@@ -15,11 +16,11 @@ type Server struct {
 }
 
 func New(log *slog.Logger) *Server {
-	handler := handlers.New(log)
+	handler := handlers.New()
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/api/", handler.Proxy)
+	mux.Handle("/api/", middleware.LoggerMiddleware(log, http.HandlerFunc(handler.Proxy)))
 
 	Http := &http.Server{
 		Addr:         ":8080",
