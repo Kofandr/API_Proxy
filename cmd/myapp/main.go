@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// Ну как заебок???
 func main() {
 
 	log := logger.New("INFO")
