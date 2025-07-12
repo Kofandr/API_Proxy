@@ -6,14 +6,17 @@ import (
 	"net/http"
 )
 
-// ProxyClient выполняет HTTP-запросы
+type HTTPClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
 type ProxyClient struct {
-	client *http.Client
+	Client HTTPClient // Используем интерфейс вместо *http.Client
 }
 
 func NewProxyClient() *ProxyClient {
 	return &ProxyClient{
-		client: &http.Client{},
+		Client: &http.Client{},
 	}
 }
 
@@ -27,5 +30,5 @@ func (p *ProxyClient) Do(ctx context.Context, method, url string, body io.Reader
 			req.Header.Add(key, value)
 		}
 	}
-	return p.client.Do(req)
+	return p.Client.Do(req)
 }
