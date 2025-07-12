@@ -8,13 +8,6 @@ import (
 	"time"
 )
 
-type contextKey string
-
-const (
-	RequestIDKey contextKey = "requestID"
-	LoggerKey    contextKey = "logger"
-)
-
 func LoggerMiddleware(logger *slog.Logger, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -22,8 +15,8 @@ func LoggerMiddleware(logger *slog.Logger, next http.Handler) http.Handler {
 
 		requestLogger := logger.With("requestID", requestID)
 
-		ctx := context.WithValue(r.Context(), RequestIDKey, requestID)
-		ctx = context.WithValue(ctx, LoggerKey, requestLogger)
+		ctx := context.WithValue(r.Context(), "requestID", requestID)
+		ctx = context.WithValue(ctx, "logger", requestLogger)
 		r = r.WithContext(ctx)
 
 		requestLogger.Info("Request started",
@@ -56,17 +49,8 @@ func (rw *responseWriter) WriteHeader(code int) {
 	rw.ResponseWriter.WriteHeader(code)
 }
 
-// GetRequestID извлекает requestID из контекста
-func GetRequestID(ctx context.Context) string {
-	if requestID, ok := ctx.Value(RequestIDKey).(string); ok {
-		return requestID
-	}
-	return ""
-}
-
-// GetLogger извлекает логгер из контекста
 func GetLogger(ctx context.Context) *slog.Logger {
-	if logger, ok := ctx.Value(LoggerKey).(*slog.Logger); ok {
+	if logger, ok := ctx.Value("logger").(*slog.Logger); ok {
 		return logger
 	}
 	return slog.Default()

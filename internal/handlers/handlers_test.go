@@ -172,7 +172,7 @@ func TestHandler_Proxy(t *testing.T) {
 			for k, v := range tt.mockHeaders {
 				mockResp.Header.Set(k, v)
 			}
-			handler.client = &mockClient{resp: mockResp, err: tt.mockErr}
+			handler.proxyClient = &mockClient{resp: mockResp, err: tt.mockErr}
 
 			body := strings.NewReader(tt.body)
 			req := httptest.NewRequest(tt.method, tt.path, body)
