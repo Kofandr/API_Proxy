@@ -8,6 +8,9 @@ import (
 	"time"
 )
 
+type CtxLoggerKey struct {
+}
+
 func LoggerMiddleware(logger *slog.Logger, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -16,7 +19,7 @@ func LoggerMiddleware(logger *slog.Logger, next http.Handler) http.Handler {
 		requestLogger := logger.With("requestID", requestID)
 
 		ctx := context.WithValue(r.Context(), "requestID", requestID)
-		ctx = context.WithValue(ctx, "logger", requestLogger)
+		ctx = context.WithValue(ctx, CtxLoggerKey{}, requestLogger)
 		r = r.WithContext(ctx)
 
 		requestLogger.Info("Request started",
@@ -47,11 +50,4 @@ type responseWriter struct {
 func (rw *responseWriter) WriteHeader(code int) {
 	rw.statusCode = code
 	rw.ResponseWriter.WriteHeader(code)
-}
-
-func GetLogger(ctx context.Context) *slog.Logger {
-	if logger, ok := ctx.Value("logger").(*slog.Logger); ok {
-		return logger
-	}
-	return slog.Default()
 }

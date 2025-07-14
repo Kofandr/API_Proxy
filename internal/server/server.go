@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/Kofandr/API_Proxy.git/internal/handlers"
-	"github.com/Kofandr/API_Proxy.git/internal/middleware"
+	"github.com/Kofandr/API_Proxy/internal/handlers"
+	"github.com/Kofandr/API_Proxy/internal/middleware"
 	"time"
 
 	"log/slog"

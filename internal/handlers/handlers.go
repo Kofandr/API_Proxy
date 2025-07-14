@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"github.com/Kofandr/API_Proxy.git/internal/middleware"
-	"github.com/Kofandr/API_Proxy.git/internal/pathbuilder"
-	"github.com/Kofandr/API_Proxy.git/internal/proxy"
-	"github.com/Kofandr/API_Proxy.git/internal/utils"
+	"github.com/Kofandr/API_Proxy/internal/logger"
+	"github.com/Kofandr/API_Proxy/internal/pathbuilder"
+	"github.com/Kofandr/API_Proxy/internal/proxy"
+	"github.com/Kofandr/API_Proxy/internal/utils"
 	"io"
 	"net/http"
 	"strings"
@@ -27,7 +27,7 @@ func New() *Handler {
 }
 
 func (handler *Handler) Proxy(w http.ResponseWriter, r *http.Request) {
-	logger := middleware.GetLogger(r.Context())
+	logger := logger.MustLoggerFromCtx(r.Context())
 
 	targetURL, err := pathbuilder.BuildTargetURL(handler.baseURL, r.URL.Path)
 	if err != nil {

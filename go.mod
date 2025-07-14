@@ -1,4 +1,4 @@
-module github.com/Kofandr/API_Proxy.git
+module github.com/Kofandr/API_Proxy
 
 go 1.24.4
 

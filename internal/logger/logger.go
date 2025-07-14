@@ -1,11 +1,11 @@
 package logger
 
 import (
+	"context"
+	"github.com/Kofandr/API_Proxy/internal/middleware"
 	"log/slog"
 	"os"
 )
-
-// пока без конфига чтобы нормально его с такском сделать
 
 func New(level string) *slog.Logger {
 	otps := &slog.HandlerOptions{}
@@ -23,4 +23,11 @@ func New(level string) *slog.Logger {
 
 	return slog.New(slog.NewJSONHandler(os.Stdout, otps))
 
+}
+
+func MustLoggerFromCtx(ctx context.Context) *slog.Logger {
+	if logger, ok := ctx.Value(middleware.CtxLoggerKey{}).(*slog.Logger); ok {
+		return logger
+	}
+	return slog.Default()
 }

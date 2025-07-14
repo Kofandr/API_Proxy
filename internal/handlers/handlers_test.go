@@ -3,9 +3,9 @@ package handlers
 import (
 	"context"
 	"errors"
-	"github.com/Kofandr/API_Proxy.git/internal/logger"
-	"github.com/Kofandr/API_Proxy.git/internal/middleware"
-	"github.com/Kofandr/API_Proxy.git/internal/proxy"
+	"github.com/Kofandr/API_Proxy/internal/logger"
+	"github.com/Kofandr/API_Proxy/internal/middleware"
+	"github.com/Kofandr/API_Proxy/internal/proxy"
 
 	"github.com/stretchr/testify/assert"
 	"io"
