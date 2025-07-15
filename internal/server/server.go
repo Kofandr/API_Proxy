@@ -2,7 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/Kofandr/API_Proxy/internal/handlers"
+	"github.com/Kofandr/API_Proxy/internal/client"
+	"github.com/Kofandr/API_Proxy/internal/handler"
 	"github.com/Kofandr/API_Proxy/internal/middleware"
 	"time"
 
@@ -16,11 +17,13 @@ type Server struct {
 }
 
 func New(log *slog.Logger) *Server {
-	handler := handlers.New()
+
+	restyClient := client.NewRestyClient()
+	handler := handler.New(restyClient)
 
 	mux := http.NewServeMux()
 
-	mux.Handle("/api/", middleware.LoggerMiddleware(log, http.HandlerFunc(handler.Proxy)))
+	mux.Handle("/posts/", middleware.LoggerMiddleware(log, http.HandlerFunc(handler.Get)))
 
 	Http := &http.Server{
 		Addr:         ":8080",
