@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/Kofandr/API_Proxy/config"
 	"github.com/Kofandr/API_Proxy/internal/logger"
 	"github.com/go-resty/resty/v2"
 	"net/http"
@@ -12,9 +13,9 @@ type Handler struct {
 	restyClient *resty.Client
 }
 
-func New(client *resty.Client) *Handler {
+func New(client *resty.Client, cfg *config.Configuration) *Handler {
 	return &Handler{
-		baseURL:     "https://jsonplaceholder.typicode.com/posts/",
+		baseURL:     cfg.PathProxy,
 		restyClient: client,
 	}
 }
@@ -35,7 +36,7 @@ func (handler *Handler) Get(w http.ResponseWriter, r *http.Request) {
 		Get(handler.baseURL + id)
 	if err != nil {
 		logger.Error("Upstream error", "url", (handler.baseURL + id), "method", r.Method, "error", err)
-		http.Error(w, "Server Error", http.StatusNotFound)
+		http.Error(w, "Server Error", http.StatusInternalServerError)
 		return
 	}
 

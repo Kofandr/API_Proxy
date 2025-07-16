@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"github.com/Kofandr/API_Proxy/config"
 	"github.com/Kofandr/API_Proxy/internal/logger"
 	"github.com/Kofandr/API_Proxy/internal/server"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -14,14 +16,20 @@ import (
 // Ну как заебок???
 func main() {
 
-	log := logger.New("INFO")
+	pathConfig := os.Getenv("CONFIG_PATH")
+	cfg, err := config.Load(pathConfig)
+	if err != nil {
+		log.Fatalf("Config error: %s", err)
+	}
 
-	mainServer := server.New(log)
+	logger := logger.New(cfg.LoggerLevel)
+
+	mainServer := server.New(logger, cfg)
 
 	go func() {
 		if err := mainServer.Start(); err != nil && err != http.ErrServerClosed {
-			log.Error("Server error", "error", err)
-			os.Exit(1)
+			log.Fatalf("Server crash")
+
 		}
 	}()
 
@@ -33,11 +41,11 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	log.Info("Shutting down...")
+	logger.Info("Shutting down...")
 	if err := mainServer.Shutdown(ctx); err != nil {
-		log.Error("Shutdown failed", "error", err)
+		logger.Error("Shutdown failed", "error", err)
 	} else {
-		log.Info("Server stopped")
+		logger.Info("Server stopped")
 	}
 
 }

@@ -1,0 +1,3 @@
+port: 8080
+pathProxy: "https://jsonplaceholder.typicode.com/posts/"
+loggerLevel: "debug"

@@ -2,9 +2,11 @@ package server
 
 import (
 	"context"
+	"github.com/Kofandr/API_Proxy/config"
 	"github.com/Kofandr/API_Proxy/internal/client"
 	"github.com/Kofandr/API_Proxy/internal/handler"
 	"github.com/Kofandr/API_Proxy/internal/middleware"
+	"strconv"
 	"time"
 
 	"log/slog"
@@ -12,28 +14,29 @@ import (
 )
 
 type Server struct {
-	Http *http.Server
-	log  *slog.Logger
+	Http   *http.Server
+	log    *slog.Logger
+	config *config.Configuration
 }
 
-func New(log *slog.Logger) *Server {
+func New(log *slog.Logger, cfg *config.Configuration) *Server {
 
 	restyClient := client.NewRestyClient()
-	handler := handler.New(restyClient)
+	handler := handler.New(restyClient, cfg)
 
 	mux := http.NewServeMux()
 
 	mux.Handle("/posts/", middleware.LoggerMiddleware(log, http.HandlerFunc(handler.Get)))
 
 	Http := &http.Server{
-		Addr:         ":8080",
+		Addr:         (":" + strconv.Itoa(cfg.Port)),
 		Handler:      mux,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  30 * time.Second,
 	}
 
-	return &Server{Http, log}
+	return &Server{Http, log, cfg}
 
 }
 

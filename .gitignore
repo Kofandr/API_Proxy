@@ -24,6 +24,7 @@ Thumbs.db
 .vscode/      # VS Code
 
 
-.env          # Файлы окружения
+.env
+.yaml
 
 docs/docs.go
