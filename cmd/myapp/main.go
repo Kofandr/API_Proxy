@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/Kofandr/API_Proxy.git/internal/logger"
-	"github.com/Kofandr/API_Proxy.git/internal/server"
+	"github.com/Kofandr/API_Proxy/internal/logger"
+	"github.com/Kofandr/API_Proxy/internal/server"
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// Ну как заебок???
 func main() {
 
 	log := logger.New("INFO")
