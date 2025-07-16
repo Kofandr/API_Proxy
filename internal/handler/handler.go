@@ -35,7 +35,7 @@ func (handler *Handler) Get(w http.ResponseWriter, r *http.Request) {
 		Get(handler.baseURL + id)
 	if err != nil {
 		logger.Error("Upstream error", "url", (handler.baseURL + id), "method", r.Method, "error", err)
-		http.Error(w, "Server Error", http.StatusInternalServerError)
+		http.Error(w, "Server Error", http.StatusNotFound)
 		return
 	}
 
